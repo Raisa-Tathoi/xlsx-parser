@@ -1,6 +1,8 @@
 window.App = window.App || {};
 
 App.UiRenderer = (() => {
+  const COPIED_FLASH_MS = 1500;
+
   function clearChildren(container) {
     container.innerHTML = '';
   }
@@ -11,16 +13,54 @@ App.UiRenderer = (() => {
     return preview;
   }
 
+  function flashButtonLabel(button, transientLabel, disableWhileFlashing) {
+    const originalLabel = button.textContent;
+    button.textContent = transientLabel;
+    if (disableWhileFlashing) button.disabled = true;
+    setTimeout(() => {
+      button.textContent = originalLabel;
+      if (disableWhileFlashing) button.disabled = false;
+    }, COPIED_FLASH_MS);
+  }
+
+  async function handleCopyClick(button, content) {
+    try {
+      await App.Clipboard.copyPlainText(content);
+      flashButtonLabel(button, 'Copied!', true);
+    } catch (err) {
+      flashButtonLabel(button, 'Copy failed', false);
+    }
+  }
+
+  function createCopyButton(content) {
+    const button = document.createElement('button');
+    button.textContent = 'Copy';
+    button.addEventListener('click', () => handleCopyClick(button, content));
+    return button;
+  }
+
+  function createDownloadButton(file, onDownload) {
+    const button = document.createElement('button');
+    button.textContent = 'Download';
+    button.addEventListener('click', () => onDownload(file));
+    return button;
+  }
+
+  function createActionsBar(file, onDownload) {
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    actions.appendChild(createCopyButton(file.content));
+    actions.appendChild(createDownloadButton(file, onDownload));
+    return actions;
+  }
+
   function createCardHeader(file, onDownload) {
     const header = document.createElement('header');
     const nameSpan = document.createElement('span');
     nameSpan.className = 'name';
     nameSpan.textContent = file.name;
-    const downloadButton = document.createElement('button');
-    downloadButton.textContent = 'Download';
-    downloadButton.addEventListener('click', () => onDownload(file));
     header.appendChild(nameSpan);
-    header.appendChild(downloadButton);
+    header.appendChild(createActionsBar(file, onDownload));
     return header;
   }
 

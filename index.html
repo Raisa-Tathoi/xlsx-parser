@@ -8,19 +8,27 @@
   <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script defer src="js/dom-refs.js"></script>
+  <script defer src="js/app-state.js"></script>
+  <script defer src="js/clipboard.js"></script>
+  <script defer src="js/column-label.js"></script>
   <script defer src="js/grid-utils.js"></script>
   <script defer src="js/workbook-loader.js"></script>
   <script defer src="js/text-builder.js"></script>
+  <script defer src="js/file-namer.js"></script>
   <script defer src="js/parser.js"></script>
   <script defer src="js/downloader.js"></script>
   <script defer src="js/status-bar.js"></script>
   <script defer src="js/ui-renderer.js"></script>
+  <script defer src="js/event-handlers.js"></script>
   <script defer src="js/main.js"></script>
 </head>
 <body>
 
 <h1>XLSX → Text Parser</h1>
-<p class="sub">Upload an .xlsx file, pick a sheet, choose direction, and generate one .txt per row (or column). Cells are joined with a blank-line paragraph break.</p>
+<p class="sub">
+  Upload an .xlsx file, pick a sheet, choose direction, and generate one .txt per row (or column).
+  Cells are joined with a blank-line paragraph break.
+</p>
 
 <fieldset>
   <legend>1. File &amp; sheet</legend>
@@ -41,7 +49,11 @@
     <label><input type="radio" name="dir" value="col" /> Parse by column (one file per column)</label>
   </div>
   <div class="row">
-    <label>Skip first <input type="number" id="skip" value="0" min="0" step="1" /> non-empty <span id="skipLabel">rows</span> from top</label>
+    <label>
+      Skip first
+      <input type="number" id="skip" value="0" min="0" step="1" />
+      non-empty <span id="skipLabel">rows</span> from top
+    </label>
   </div>
   <div class="row">
     <button id="parseBtn" class="primary" disabled>Parse</button>

@@ -16,16 +16,19 @@ App.Parser = (() => {
     return { startIndex: lines.length, skippedCount: skipped };
   }
 
+  function buildFile(line, lineIndex, direction, sheetName) {
+    return {
+      name: App.FileNamer.buildFileName(sheetName, direction, lineIndex),
+      content: App.TextBuilder.buildContent(line),
+    };
+  }
+
   function buildFiles(lines, startIndex, direction, sheetName) {
-    const { isNonEmpty } = App.GridUtils;
-    const { buildContent, buildFileName } = App.TextBuilder;
+    const isNonEmpty = App.GridUtils.isNonEmpty;
     const files = [];
     for (let idx = startIndex; idx < lines.length; idx++) {
       if (!isNonEmpty(lines[idx])) continue;
-      files.push({
-        name: buildFileName(sheetName, direction, idx),
-        content: buildContent(lines[idx]),
-      });
+      files.push(buildFile(lines[idx], idx, direction, sheetName));
     }
     return files;
   }

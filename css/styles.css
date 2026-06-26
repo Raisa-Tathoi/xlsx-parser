@@ -78,6 +78,11 @@ button.primary {
 
 .file-card .name { font-weight: 600; }
 
+.file-card .actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
 .file-card pre {
   background: #f7f7f7;
   color: #111;
